@@ -32,7 +32,6 @@ include { getGenomeAttribute      } from './subworkflows/local/utils_nfcore_dnan
 // TODO nf-core: Remove this line if you don't need a FASTA file
 //   This is an example of how to use getGenomeAttribute() to fetch parameters
 //   from igenomes.config using `--genome`
-params.fasta = getGenomeAttribute('fasta')
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -57,8 +56,10 @@ workflow NFCORE_DNANEXUSDATAACCESSTEST {
         samplesheet
     )
 
+    /*
     emit:
     multiqc_report = DNANEXUSDATAACCESSTEST.out.multiqc_report // channel: /path/to/multiqc_report.html
+    */
 
 }
 /*
@@ -74,6 +75,7 @@ workflow {
     //
     // SUBWORKFLOW: Run initialisation tasks
     //
+    /*
     PIPELINE_INITIALISATION (
         params.version,
         params.help,
@@ -83,17 +85,21 @@ workflow {
         params.outdir,
         params.input
     )
+    */
 
     //
     // WORKFLOW: Run main workflow
     //
+    input_channel = channel.of("s3://dnanexus-nextflow-dev/test.txt")
     NFCORE_DNANEXUSDATAACCESSTEST (
-        PIPELINE_INITIALISATION.out.samplesheet
+        //PIPELINE_INITIALISATION.out.samplesheet
+        input_channel
     )
 
     //
     // SUBWORKFLOW: Run completion tasks
     //
+    /*
     PIPELINE_COMPLETION (
         params.email,
         params.email_on_fail,
@@ -103,6 +109,7 @@ workflow {
         params.hook_url,
         NFCORE_DNANEXUSDATAACCESSTEST.out.multiqc_report
     )
+    */
 }
 
 /*
