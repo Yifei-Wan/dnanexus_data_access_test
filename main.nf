@@ -32,8 +32,8 @@ include { getGenomeAttribute      } from './subworkflows/local/utils_nfcore_dnan
 // TODO nf-core: Remove this line if you don't need a FASTA file
 //   This is an example of how to use getGenomeAttribute() to fetch parameters
 //   from igenomes.config using `--genome`
-AWS_ACCESS_KEY_ID = params.aws_access_key_id
-AWS_SECRET_ACCESS_KEY = params.aws_secret_access_key
+aws.accessKey = params.aws_access_key_id
+aws.secretKey = params.aws_secret_access_key
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
