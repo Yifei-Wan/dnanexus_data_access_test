@@ -67,6 +67,19 @@ workflow NFCORE_DNANEXUSDATAACCESSTEST {
     RUN MAIN WORKFLOW
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
+process getPresignUrl {
+    debug true
+    input:
+    val input_file
+    output:
+    env output_path, emit: output_path
+
+    script:
+    """
+    output_path=`aws s3 presign --endpoint-url https://s3.us-east-1.wasabisys.com ${input_file}`  
+    echo \$output_path
+    """
+}
 
 workflow {
 
@@ -90,7 +103,11 @@ workflow {
     //
     // WORKFLOW: Run main workflow
     //
-    input_channel = channel.of("s3://dnanexus-nextflow-dev/test.txt")
+    //input_channel = channel.of("s3://dnanexus-nextflow-dev/test.txt")
+    input_channel = channel.of('s3://dnanexus-nextflow-dev/nf_test.txt')
+    getPresignUrl(input_channel)
+    getPresignUrl.out.output_path.view()
+    //createNewFile(getPresignUrl.out.output_path)
     NFCORE_DNANEXUSDATAACCESSTEST (
         //PIPELINE_INITIALISATION.out.samplesheet
         input_channel
