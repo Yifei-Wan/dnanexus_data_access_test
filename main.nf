@@ -104,8 +104,8 @@ workflow {
     // WORKFLOW: Run main workflow
     //
     //input_channel = channel.of("s3://dnanexus-nextflow-dev/test.txt")
-    input_channel = channel.of('s3://dnanexus-nextflow-dev/nf_test.txt')
-    getPresignUrl(input_channel)
+    //input_channel = channel.of('s3://dnanexus-nextflow-dev/nf_test.txt')
+    getPresignUrl('s3://dnanexus-nextflow-dev/nf_test.txt')
     getPresignUrl.out.output_path.view()
     //createNewFile(getPresignUrl.out.output_path)
     NFCORE_DNANEXUSDATAACCESSTEST (
