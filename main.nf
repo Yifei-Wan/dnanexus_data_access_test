@@ -76,6 +76,12 @@ process getPresignUrl {
 
     script:
     """
+    secret=$(aws secretsmanager get-secret-value --secret-id dev/dnanexus/wasabi --query SecretString --output text)
+    WASABI_ACCESS_KEY_ID=$(echo $secret | jq -r '.WASABI_ACCESS_KEY_ID')
+    WASABI_SECRET_ACCESS_KEY=$(echo $secret | jq -r '.WASABI_SECRET_ACCESS_KEY')
+    aws configure set aws_access_key_id $WASABI_ACCESS_KEY_ID
+    aws configure set aws_secret_access_key $WASABI_SECRET_ACCESS_KEY
+    aws configure set region us-east-1
     output_path=`aws s3 presign --endpoint-url https://s3.us-east-1.wasabisys.com ${input_file}`  
     echo \$output_path
     """
@@ -108,10 +114,10 @@ workflow {
     getPresignUrl('s3://dnanexus-nextflow-dev/nf_test.txt')
     getPresignUrl.out.output_path.view()
     //createNewFile(getPresignUrl.out.output_path)
-    NFCORE_DNANEXUSDATAACCESSTEST (
+    //NFCORE_DNANEXUSDATAACCESSTEST (
         //PIPELINE_INITIALISATION.out.samplesheet
-        input_channel
-    )
+        //input_channel
+    //)
 
     //
     // SUBWORKFLOW: Run completion tasks

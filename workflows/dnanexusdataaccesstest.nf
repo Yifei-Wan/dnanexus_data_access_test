@@ -32,6 +32,21 @@ process createNewFile {
     """
 }
 
+process createNewFile_wasabi {
+    publishDir 's3://dnanexus-nextflow-dev/output', mode: 'copy', overwrite: false
+
+    input:
+    path input_file
+
+    output:
+    path 'direct_s3_output.txt'
+
+    script:
+    """
+    cp ${input_file} direct_s3_output.txt
+    """
+}
+
 workflow DNANEXUSDATAACCESSTEST {
 
     take:
